@@ -8,7 +8,7 @@ import tailwindcssAnimate from 'tailwindcss-animate'
 
 // 集成配置
 export const viteConfig = defineConfig({
-  base: './',
+  base: '/tech-bloy/',
   plugins: [inspectAttr(), react()],
   resolve: {
     alias: {
