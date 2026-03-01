@@ -1,4 +1,4 @@
-# TechFlow - 开发者博客系统
+# TechFlow
 
 一个基于 React + TypeScript + Vite 构建的现代化开发者博客系统，使用 GitHub API 作为内容源。
 
