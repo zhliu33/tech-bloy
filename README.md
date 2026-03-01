@@ -1,6 +1,6 @@
 # TechFlow
 
-一个基于 React + TypeScript + Vite 构建的现代化开发者博客系统，使用 GitHub API 作为内容源。
+一个基于 React + TypeScript + Vite 构建的现代化博客系统，使用 GitHub API 作为内容源。
 
 ## 功能特性
 
@@ -147,7 +147,7 @@
 ```typescript
 export const themeConfig: ThemeConfig = {
   name: 'TechFlow',
-  description: '一个简洁优雅的开发者博客，分享技术见解与实践经验',
+  description: '一个简洁优雅的博客，分享技术见解与实践经验',
   author: {
     name: 'yourname',
     avatar: 'your-avatar-url',
