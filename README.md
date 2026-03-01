@@ -47,14 +47,24 @@
    ```
 
 3. **配置 GitHub API**
-   修改 `src/services/github.ts` 文件中的 GitHub 配置：
+   修改 `src/services/github.ts` 文件中的 GitHub 配置，或通过环境变量设置：
    ```typescript
    const GITHUB_CONFIG = {
-     owner: 'yourusername',  // 你的 GitHub 用户名
-     repo: 'your-blog-repo', // 存放博客文章的仓库
-     branch: 'main',         // 分支名称
-     postsPath: 'posts',      // 文章存放路径
+     owner: import.meta.env.VITE_GITHUB_OWNER || 'yourusername',  // 你的 GitHub 用户名
+     repo: import.meta.env.VITE_GITHUB_REPO || 'your-blog-repo', // 存放博客文章的仓库
+     branch: import.meta.env.VITE_GITHUB_BRANCH || 'main',         // 分支名称
+     postsPath: import.meta.env.VITE_GITHUB_POSTS_PATH || 'posts',      // 文章存放路径
+     token: import.meta.env.VITE_GITHUB_TOKEN || '', // GitHub 个人访问令牌（可选，用于提高 API 速率限制）
    };
+   ```
+
+   或在 `.env` 文件中设置环境变量：
+   ```
+   VITE_GITHUB_OWNER=yourusername
+   VITE_GITHUB_REPO=your-blog-repo
+   VITE_GITHUB_BRANCH=main
+   VITE_GITHUB_POSTS_PATH=posts
+   VITE_GITHUB_TOKEN=your-github-token
    ```
 
 4. **启动开发服务器**
@@ -91,29 +101,42 @@
 │   └── index.css         # 全局样式
 ├── public/               # 静态资源
 ├── dist/                 # 构建输出
+├── .github/              # GitHub 配置
+│   └── workflows/        # GitHub Actions 工作流
 ├── package.json          # 项目配置
 ├── vite.config.ts        # Vite 配置
-└── tsconfig.json         # TypeScript 配置
+├── tsconfig.json         # TypeScript 配置
+├── .env                  # 环境变量文件（可选）
+├── LICENSE               # 许可证文件
+└── README.md             # 项目说明文件
 ```
 
 ## 部署
 
 ### GitHub Pages
 
-1. **构建项目**
-   ```bash
-   npm run build
-   ```
+本项目已配置 GitHub Actions 自动部署，无需手动操作。当你推送到 `main` 分支时，GitHub Actions 会自动构建并部署到 `gh-pages` 分支。
 
-2. **部署到 GitHub Pages**
-   - 手动部署：将 `dist` 目录内容推送到 `gh-pages` 分支
-   - 自动部署：使用 GitHub Actions 自动构建和部署
+**配置步骤**：
+1. 确保你的仓库已启用 GitHub Pages（设置 → Pages → 来源选择 `gh-pages` 分支）
+2. 在仓库的 `Settings → Secrets and variables → Actions` 中添加以下环境变量：
+   - `VITE_GITHUB_OWNER`: 你的 GitHub 用户名
+   - `VITE_GITHUB_REPO`: 存放博客文章的仓库
+   - `VITE_GITHUB_BRANCH`: 分支名称（通常为 main）
+   - `VITE_GITHUB_POSTS_PATH`: 文章存放路径（通常为 posts）
+   - `VITE_GITHUB_TOKEN`: GitHub 个人访问令牌（可选，用于提高 API 速率限制）
 
 ### 其他静态托管服务
 
 - **Vercel**: 直接导入 GitHub 仓库，自动部署
-- **Netlify**: 连接 GitHub 仓库，设置构建命令为 `npm run build`
-- **Cloudflare Pages**: 连接 GitHub 仓库，设置构建命令和输出目录
+- **Netlify**: 连接 GitHub 仓库，设置构建命令为 `npm run build`，输出目录为 `dist`
+- **Cloudflare Pages**: 
+  1. 连接 GitHub 仓库
+  2. 设置构建命令为 `npm run build`
+  3. 设置输出目录为 `dist`
+  4. 在 "Environment variables" 中添加必要的环境变量（与 GitHub Actions 相同）
+  5. 选择 Framework preset 为 "React"
+  6. 触发构建和部署
 
 ## 配置
 
@@ -124,14 +147,13 @@
 ```typescript
 export const themeConfig: ThemeConfig = {
   name: 'TechFlow',
-  description: '一个简洁优雅的开发者博客',
+  description: '一个简洁优雅的开发者博客，分享技术见解与实践经验',
   author: {
-    name: '开发者',
-    avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=developer',
-    bio: '热爱代码，热爱生活',
+    name: 'yourname',
+    avatar: 'your-avatar-url',
+    bio: '热爱代码，热爱生活。分享前端开发、工程化实践与技术思考。',
     social: {
-      github: 'https://github.com',
-      email: 'mailto:your-email@example.com',
+      github: 'https://github.com/yourusername',
     },
   },
   navigation: [
@@ -204,9 +226,4 @@ yarn test
 
 ## 许可证
 
-MIT License
-
-## 联系方式
-
-- GitHub: [yourusername](https://github.com/yourusername)
-- Email: your-email@example.com
+本项目使用 MIT 许可证，详情请参阅 [LICENSE] 文件。
