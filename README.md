@@ -1,4 +1,4 @@
-# DevBlog - 开发者博客系统
+# TechFlow - 开发者博客系统
 
 一个基于 React + TypeScript + Vite 构建的现代化开发者博客系统，使用 GitHub API 作为内容源。
 
@@ -35,8 +35,8 @@
 
 1. **克隆仓库**
    ```bash
-   git clone https://github.com/yourusername/devblog.git
-   cd devblog
+   git clone https://github.com/zhliu33/tech-bloy.git
+   cd tech-bloy
    ```
 
 2. **安装依赖**
@@ -123,7 +123,7 @@
 
 ```typescript
 export const themeConfig: ThemeConfig = {
-  name: 'DevBlog',
+  name: 'TechFlow',
   description: '一个简洁优雅的开发者博客',
   author: {
     name: '开发者',

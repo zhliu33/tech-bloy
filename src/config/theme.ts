@@ -1,7 +1,7 @@
 import type { ThemeConfig } from '@/types/blog';
 
 export const themeConfig: ThemeConfig = {
-  name: 'DevBlog',
+  name: 'TechFlow',
   description: '一个简洁优雅的开发者博客，分享技术见解与实践经验',
   author: {
     name: '开发者',
