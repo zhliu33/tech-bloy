@@ -57,6 +57,7 @@ const GITHUB_CONFIG = {
   repo: import.meta.env.VITE_GITHUB_REPO || 'react',
   branch: import.meta.env.VITE_GITHUB_BRANCH || 'main',
   postsPath: import.meta.env.VITE_GITHUB_POSTS_PATH || 'fixtures/packaging',
+  token: import.meta.env.VITE_GITHUB_TOKEN || '',
 };
 
 
@@ -66,20 +67,29 @@ export class GitHubService {
   private repo: string;
   private branch: string;
   private postsPath: string;
+  private token: string;
 
   constructor(config?: Partial<typeof GITHUB_CONFIG>) {
     this.owner = config?.owner || GITHUB_CONFIG.owner;
     this.repo = config?.repo || GITHUB_CONFIG.repo;
     this.branch = config?.branch || GITHUB_CONFIG.branch;
     this.postsPath = config?.postsPath || GITHUB_CONFIG.postsPath;
+    this.token = config?.token || GITHUB_CONFIG.token;
   }
 
   // 获取文章列表
   async getPosts(): Promise<Post[]> {
     try {
+      // 准备请求头
+      const headers: HeadersInit = {};
+      if (this.token) {
+        headers['Authorization'] = `Bearer ${this.token}`;
+      }
+
       // 尝试从GitHub获取
       const response = await fetch(
-        `https://api.github.com/repos/${this.owner}/${this.repo}/contents/${this.postsPath}?ref=${this.branch}`
+        `https://api.github.com/repos/${this.owner}/${this.repo}/contents/${this.postsPath}?ref=${this.branch}`,
+        { headers }
       );
 
       if (!response.ok) {
