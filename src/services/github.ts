@@ -1,35 +1,55 @@
 import type { Post } from '@/types/blog';
-import matter from 'gray-matter';
-import { marked } from 'marked';
-import katex from 'katex';
-import 'katex/dist/katex.min.css';
 
-// 配置 marked 以支持数学公式
-marked.use({
-  extensions: [
-    {
-      name: 'math',
-      level: 'inline',
-      start(src) { return src.indexOf('$'); },
-      tokenizer(src) {
-        const match = src.match(/^\$+([^$]+)\$+/);
-        if (match) {
-          return {
-            type: 'math',
-            raw: match[0],
-            text: match[1].trim()
-          };
+// 延迟加载markdown相关库
+let matter: any;
+let marked: any;
+let katex: any;
+
+// 初始化markdown库
+async function initMarkdownLibs() {
+  if (!matter || !marked || !katex) {
+    // 动态导入markdown相关库
+    const [matterModule, markedModule, katexModule] = await Promise.all([
+      import('gray-matter'),
+      import('marked'),
+      import('katex')
+    ]);
+    
+    matter = matterModule.default;
+    marked = markedModule.marked;
+    katex = katexModule.default;
+    
+    // 配置 marked 以支持数学公式
+    marked.use({
+      extensions: [
+        {
+          name: 'math',
+          level: 'inline',
+          start(src: string) { return src.indexOf('$'); },
+          tokenizer(src: string) {
+            const match = src.match(/^\$+([^$]+)\$+/);
+            if (match) {
+              return {
+                type: 'math',
+                raw: match[0],
+                text: match[1].trim()
+              };
+            }
+          },
+          renderer(token: { text: string; raw: string }) {
+            return katex.renderToString(token.text, {
+              throwOnError: false,
+              displayMode: token.raw.startsWith('$$') && token.raw.endsWith('$$')
+            });
+          }
         }
-      },
-      renderer(token) {
-        return katex.renderToString(token.text, {
-          throwOnError: false,
-          displayMode: token.raw.startsWith('$$') && token.raw.endsWith('$$')
-        });
-      }
-    }
-  ]
-});
+      ]
+    });
+    
+    // 动态导入KaTeX样式
+    await import('katex/dist/katex.min.css');
+  }
+}
 
 // GitHub 配置 - 优先从环境变量读取，其次使用默认值
 const GITHUB_CONFIG = {
@@ -97,7 +117,10 @@ export class GitHubService {
   }
 
   // 解析文章内容
-  private parsePostContent(content: string, filename: string): Post {
+  private async parsePostContent(content: string, filename: string): Promise<Post> {
+    // 确保markdown库已初始化
+    await initMarkdownLibs();
+    
     const { data, content: markdownContent } = matter(content);
     const slug = filename.replace('.md', '');
     

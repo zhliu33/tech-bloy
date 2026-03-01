@@ -8,37 +8,8 @@ import { GiscusComments } from '@/components/blog/GiscusComments';
 import { PostList } from '@/components/blog/PostList';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { marked } from 'marked';
-import katex from 'katex';
-import 'katex/dist/katex.min.css';
 import { toast } from 'sonner';
-
-// 配置 marked 以支持数学公式
-marked.use({
-  extensions: [
-    {
-      name: 'math',
-      level: 'inline',
-      start(src) { return src.indexOf('$'); },
-      tokenizer(src) {
-        const match = src.match(/^\$+([^$]+)\$+/);
-        if (match) {
-          return {
-            type: 'math',
-            raw: match[0],
-            text: match[1].trim()
-          };
-        }
-      },
-      renderer(token) {
-        return katex.renderToString(token.text, {
-          throwOnError: false,
-          displayMode: token.raw.startsWith('$$') && token.raw.endsWith('$$')
-        });
-      }
-    }
-  ]
-});
+// 注意：marked和katex的配置已移至github.ts中，通过动态导入加载
 
 // 辅助函数：格式化日期
 type DateType = string | number | Date;
