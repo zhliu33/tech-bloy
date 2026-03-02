@@ -12,9 +12,6 @@ export function Footer() {
           {/* Brand */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-sm">B</span>
-              </div>
               <span className="font-bold text-xl">{themeConfig.name}</span>
             </div>
             <p className="text-muted-foreground text-sm">
