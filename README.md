@@ -213,13 +213,6 @@ npm run test
 yarn test
 ```
 
-### 代码风格
-
-- 使用 2 个空格缩进
-- 使用单引号
-- 大括号使用
-- 箭头函数
-
 ## 贡献
 
 欢迎提交 Issue 和 Pull Request！
